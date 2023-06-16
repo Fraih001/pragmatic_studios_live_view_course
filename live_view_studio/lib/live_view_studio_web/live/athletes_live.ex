@@ -10,14 +10,45 @@ defmodule LiveViewStudioWeb.AthletesLive do
         athletes: Athletes.list_athletes()
       )
 
-    {:ok, socket}
-  end
+      {:ok, socket, temporary_assigns: [athletes: []]}
+    end
 
   def render(assigns) do
     ~H"""
     <h1>Athletes</h1>
     <div id="athletes">
-      <form>
+      <.filter_form filter={@filter} />
+      <div class="athletes">
+      <.athlete :for={athlete <- @athletes} athlete={athlete} />
+      </div>
+    </div>
+    """
+  end
+  
+  def athlete(assigns) do
+    ~H"""
+    <div class="athlete">
+          <div class="emoji">
+            <%= @athlete.emoji %>
+          </div>
+          <div class="name">
+            <%= @athlete.name %>
+          </div>
+          <div class="details">
+            <span class="sport">
+              <%= @athlete.sport %>
+            </span>
+            <span class="status">
+              <%= @athlete.status %>
+            </span>
+          </div>
+        </div>
+    """
+  end
+  
+  def filter_form(assigns) do
+    ~H"""
+    <form phx-change="filter">
         <div class="filters">
           <select name="sport">
             <%= Phoenix.HTML.Form.options_for_select(
@@ -33,26 +64,14 @@ defmodule LiveViewStudioWeb.AthletesLive do
           </select>
         </div>
       </form>
-      <div class="athletes">
-        <div :for={athlete <- @athletes} class="athlete">
-          <div class="emoji">
-            <%= athlete.emoji %>
-          </div>
-          <div class="name">
-            <%= athlete.name %>
-          </div>
-          <div class="details">
-            <span class="sport">
-              <%= athlete.sport %>
-            </span>
-            <span class="status">
-              <%= athlete.status %>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
     """
+  end
+  
+  def handle_event("filter", %{"sport" => sport, "status" => status}, socket) do
+    filter = %{sport: sport, status: status}
+    athletes = Athletes.list_athletes(filter)
+    
+    {:noreply, assign(socket, athletes: athletes, filter: filter)}
   end
 
   defp sport_options do

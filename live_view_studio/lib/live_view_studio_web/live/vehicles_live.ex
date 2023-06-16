@@ -1,6 +1,8 @@
 defmodule LiveViewStudioWeb.VehiclesLive do
   use LiveViewStudioWeb, :live_view
   alias LiveViewStudio.Vehicles
+  alias LiveViewStudioWeb.CustomComponents
+
 
   def mount(_params, _session, socket) do
     socket =
@@ -28,6 +30,7 @@ defmodule LiveViewStudioWeb.VehiclesLive do
           autocomplete="off"
           readonly={@loading}
           list="matches"
+          phx-debounce="1000"
         />
         <button>
           <img src="/images/search.svg" />
@@ -42,7 +45,7 @@ defmodule LiveViewStudioWeb.VehiclesLive do
         <% end %>
       </datalist>
       
-      <div :if={@loading} class="loader">Loading... </div>
+      <CustomComponents.loading loading={@loading}/>
 
       <div class="vehicles">
         <ul>

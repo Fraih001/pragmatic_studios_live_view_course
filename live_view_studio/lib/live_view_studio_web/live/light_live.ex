@@ -31,7 +31,7 @@ defmodule LiveViewStudioWeb.LightLive do
           <img src="/images/fire.svg">
         </button>
         <form phx-change="change-brightness">
-          <input type="range" min="0" max="100"
+          <input type="range" min="0" max="100" phx-debounce="250"
           name="brightness" value={@brightness} />
         </form>
         <form phx-change="update-temp">
