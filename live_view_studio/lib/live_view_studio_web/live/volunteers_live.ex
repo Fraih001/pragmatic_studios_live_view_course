@@ -25,8 +25,8 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     <h1>Volunteer Check-In</h1>
     <div id="volunteer-checkin">
       <.form for={@form} phx-submit="save" phx-change="validate">
-        <.input field={@form[:name]} placeholder="Name" autocomplete="off"/>
-        <.input field={@form[:phone]} type="tel" placeholder="Phone" />
+        <.input field={@form[:name]} placeholder="Name" autocomplete="off" phx-debounce="2000"/>
+        <.input field={@form[:phone]} type="tel" placeholder="Phone" phx-debounce="blur"/>
         <.button phx-disable-with="Saving...">
           Check In
         </.button>
@@ -53,7 +53,12 @@ defmodule LiveViewStudioWeb.VolunteersLive do
   end
   
   def handle_event("validate", %{"volunteer" => volunteer_params}, socket) do
-    {:noreply, socket}
+    changeset = 
+      %Volunteer{}
+      |> Volunteers.change_volunteer(volunteer_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, :form, to_form(changeset))}
   end
   
   def handle_event("save", %{"volunteer" => volunteer_params}, socket) do
