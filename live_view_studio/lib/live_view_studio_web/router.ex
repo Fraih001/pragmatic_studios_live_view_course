@@ -24,7 +24,9 @@ defmodule LiveViewStudioWeb.Router do
     live("/sales", SalesLive)
     live("/flights", FlightsLive)
     live("/boats", BoatsLive)
-    live("/servers", ServersLive)
+    live "/servers", ServersLive
+    live "/servers/new", ServersLive, :new
+    live "/servers/:id", ServersLive    
     live("/donations", DonationsLive)
     live("/volunteers", VolunteersLive)
     live("/topsecret", TopSecretLive)
@@ -37,7 +39,6 @@ defmodule LiveViewStudioWeb.Router do
     live("/vehicles", VehiclesLive)
     live("/athletes", AthletesLive)
     live("/pizza-orders", PizzaOrdersLive)
-    live "/servers/:id", ServersLive
   end
 
   # Other scopes may use custom stacks.
