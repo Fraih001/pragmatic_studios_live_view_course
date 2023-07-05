@@ -2,13 +2,19 @@ defmodule LiveViewStudioWeb.VolunteersLive do
   use LiveViewStudioWeb, :live_view
 
   alias LiveViewStudio.Volunteers
+  alias LiveViewStudio.Volunteers.Volunteer
 
   def mount(_params, _session, socket) do
     volunteers = Volunteers.list_volunteers()
-
+    
+    changeset = Volunteers.change_volunteer(%Volunteer{})
+    
+    form = to_form(changeset)
+    
     socket =
       assign(socket,
-        volunteers: volunteers
+        volunteers: volunteers,
+        form: form
       )
 
     {:ok, socket}
@@ -18,6 +24,14 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     ~H"""
     <h1>Volunteer Check-In</h1>
     <div id="volunteer-checkin">
+      <.form for={@form}>
+        <.input field={@form[:name]} placeholder="Name" autocomplete="off"/>
+        <.input field={@form[:phone]} type="tel" placeholder="Phone" />
+        <.button>
+          Check In
+        </.button>
+
+      </.form>
       <div
         :for={volunteer <- @volunteers}
         class={"volunteer #{if volunteer.checked_out, do: "out"}"}
