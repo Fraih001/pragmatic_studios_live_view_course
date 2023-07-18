@@ -1,11 +1,11 @@
 defmodule LiveViewStudioWeb.SandboxLive do
   use LiveViewStudioWeb, :live_view
-  
+
   import Number.Currency
   alias LiveViewStudio.Sandbox
 
   def mount(_params, _session, socket) do
-    socket = 
+    socket =
       assign(socket,
         length: "0",
         width: "0",
@@ -13,6 +13,7 @@ defmodule LiveViewStudioWeb.SandboxLive do
         weight: 0.0,
         price: nil
       )
+
     {:ok, socket}
   end
 
@@ -57,23 +58,25 @@ defmodule LiveViewStudioWeb.SandboxLive do
     </div>
     """
   end
-  
+
   def handle_event("calculate", params, socket) do
     %{"length" => l, "width" => w, "depth" => d} = params
     weight = Sandbox.calculate_weight(l, w, d)
-    
-    socket = assign(socket, 
-    length: l,
-    width: w,
-    depth: d,
-    weight: weight,
-    price: nil)
+
+    socket =
+      assign(socket,
+        length: l,
+        width: w,
+        depth: d,
+        weight: weight,
+        price: nil
+      )
+
     {:noreply, socket}
   end
-  
+
   def handle_event("get-quote", params, socket) do
     price = Sandbox.calculate_price(socket.assigns.weight)
-    
     socket = assign(socket, price: price)
     {:noreply, socket}
   end

@@ -10,8 +10,8 @@ defmodule LiveViewStudioWeb.AthletesLive do
         athletes: Athletes.list_athletes()
       )
 
-      {:ok, socket, temporary_assigns: [athletes: []]}
-    end
+    {:ok, socket, temporary_assigns: [athletes: []]}
+  end
 
   def render(assigns) do
     ~H"""
@@ -24,10 +24,10 @@ defmodule LiveViewStudioWeb.AthletesLive do
     </div>
     """
   end
-  
+
   def athlete(assigns) do
     ~H"""
-    <div class="athlete">
+        <div class="athlete">
           <div class="emoji">
             <%= @athlete.emoji %>
           </div>
@@ -45,7 +45,7 @@ defmodule LiveViewStudioWeb.AthletesLive do
         </div>
     """
   end
-  
+
   def filter_form(assigns) do
     ~H"""
     <form phx-change="filter">
@@ -66,11 +66,11 @@ defmodule LiveViewStudioWeb.AthletesLive do
       </form>
     """
   end
-  
+
   def handle_event("filter", %{"sport" => sport, "status" => status}, socket) do
     filter = %{sport: sport, status: status}
     athletes = Athletes.list_athletes(filter)
-    
+
     {:noreply, assign(socket, athletes: athletes, filter: filter)}
   end
 
